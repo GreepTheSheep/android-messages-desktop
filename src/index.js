@@ -20,7 +20,6 @@ app.on('ready', async () => {
     height: 310,
     webPreferences: {
       enableRemoteModule: true,
-      preload: path.join(__dirname, 'loadWindow', 'preload.js'),
       nodeIntegration: false,
     },
     transparent: false,
@@ -48,7 +47,7 @@ app.on('ready', async () => {
   //contents.openDevTools()
   //await wait(5000)
 
-  require('./autoUpdater.js')(contents, customWindowEvent)
+  require('./autoUpdater.js')(true, contents, customWindowEvent)
   
   loadWindow.once('close', () =>{
     loadWindow = null

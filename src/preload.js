@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           },
           {
+            label: 'Check for Updates',
+            click(){
+                remote.require('./autoUpdater')(false, remote.getCurrentWindow().webContents, undefined)
+            }
+          },
+          {
             type: 'separator'
           },
           {
