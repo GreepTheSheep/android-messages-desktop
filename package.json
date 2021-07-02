@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/GreepTheSheep/electron-android-messages#readme",
   "dependencies": {
+    "about-window": "^1.14.0",
     "custom-electron-titlebar": "^3.2.7",
     "electron-log": "^4.3.5",
     "electron-updater": "^4.3.9",

@@ -9,7 +9,9 @@ module.exports = function(contents, customWindowEvent){
         if (devMode) {
             log.info('App started in dev mode')
             contents.executeJavaScript("document.getElementById('updatetxt').innerText = 'App started in dev mode'")
-            customWindowEvent.emit('create-main')
+            wait(5000).then(()=>{
+                customWindowEvent.emit('create-main')
+            })
         } else {
             var textChanged = false
             const myEmitter = new EventEmitter();

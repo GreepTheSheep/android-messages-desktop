@@ -4,6 +4,7 @@ const customTitlebar = require('custom-electron-titlebar');
 const {remote} = require('electron')
 const log = require('electron-log')
 const devMode = remote.require('./checkDevMode.js')
+const openAboutWindow = require('about-window').default
 
 document.addEventListener('DOMContentLoaded', () => {
   // It does not make sense to use the custom titlebar on macOS where
@@ -12,6 +13,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // add a menu
     const menu = new remote.Menu();
+
+    menu.append(new remote.MenuItem({
+        label: 'File',
+        submenu: [{
+            label: 'About',
+            click(){
+              log.verbose("About called")
+              var aboutWindow = openAboutWindow({
+                icon_path: `${__dirname}/libs/icon.png`,
+                product_name: 'Android Messages',
+                description: `The unofficial but open-source desktop app for Android Messaging`,
+                homepage: 'https://github.com/GreepTheSheep/electron-android-messages',
+                license: 'Apache-2.0',
+                use_version_info: true,
+                adjust_window_size: false,
+                use_inner_html: true,
+                bug_report_url: 'https://github.com/GreepTheSheep/electron-android-messages/issues',
+                bug_link_text: '🐛 Found bug?',
+                open_devtools: false,
+                win_options: {
+                  show: false,
+                  maximizable: false,
+                  resizable: false,
+                  minimizable: false,
+                  alwaysOnTop: true,
+                  parent: remote.getCurrentWindow()
+                }
+              });
+              aboutWindow.setTitle('About Android Messages')
+              aboutWindow.on('ready-to-show', () =>{
+                aboutWindow.show()
+              })
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Exit',
+            click(){
+                var confirm = remote.dialog.showMessageBoxSync(remote.getCurrentWindow(), {
+                    message: "Are you sure to exit? You will not receive any notifications while it is closed",
+                    type: "warning",
+                    buttons: [
+                        "Yes",
+                        "No"
+                    ],
+                    title: "Android Messages",
+                    cancelId: 1
+                })
+                if (confirm == 0){
+                    window.close()
+                }
+            }
+          }]
+      }));
+
     if (devMode) {
       menu.append(new remote.MenuItem({
         label: 'Developer Mode',
@@ -54,6 +112,9 @@ document.addEventListener('readystatechange', () => {
       .titlebar .window-title{
         font-family: 'Product Sans';
       }
+      mws-ui-lazy-loaded-extension{
+        display: none;
+      }
       ` // You can compress all css files you need and put here
     if (sty.styleSheet){
       sty.styleSheet.cssText = css;
@@ -64,5 +125,5 @@ document.addEventListener('readystatechange', () => {
   }
 });
 
-/*global document*/
+/*global document,window*/
 /*eslint no-undef: "error"*/
