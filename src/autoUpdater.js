@@ -1,4 +1,3 @@
-const { autoUpdater } = require("electron-updater")
 const { dialog } = require('electron')
 const log = require('electron-log')
 const wait = require('util').promisify(setTimeout);
@@ -30,10 +29,11 @@ module.exports = function(inLoading, contents, customWindowEvent){
                     }
                     });
                 }
-                var connexionCheck = setInterval(connexionChecker, 1000)
+                var connexionCheck = setInterval(connexionChecker, 10000)
             
                 myEmitter.on('online', () =>{
                     clearInterval(connexionCheck)
+                    const { autoUpdater } = require("electron-updater")
                     autoUpdater.checkForUpdatesAndNotify();
         
                     autoUpdater.on('checking-for-update', () => {
@@ -90,8 +90,9 @@ module.exports = function(inLoading, contents, customWindowEvent){
                 title: "Android Messages Updater"
             })
         } else {
-            autoUpdater.checkForUpdatesAndNotify();
-            autoUpdater.on('update-not-available', () => {
+            const { autoUpdater1 } = require("electron-updater")
+            autoUpdater1.checkForUpdatesAndNotify();
+            autoUpdater1.on('update-not-available', () => {
                 log.verbose('No updates available')
                 dialog.showMessageBox({
                     message: "No updates available, enjoy!",
@@ -99,7 +100,7 @@ module.exports = function(inLoading, contents, customWindowEvent){
                     title: "Android Messages Updater"
                 })
             })
-            autoUpdater.on('update-available', () => {
+            autoUpdater1.on('update-available', () => {
                 log.verbose('Update available!')
                 var confirm = dialog.showMessageBoxSync({
                     message: "Updates are available, do you want to download them ?",
@@ -112,10 +113,10 @@ module.exports = function(inLoading, contents, customWindowEvent){
                     title: "Android Messages Updater"
                 })
                 if (confirm == 0){
-                    autoUpdater.downloadUpdate()
+                    autoUpdater1.downloadUpdate()
                 }
             })
-            autoUpdater.on('update-downloaded', () => {
+            autoUpdater1.on('update-downloaded', () => {
                 log.info('Update downloaded!')
                 var confirm = dialog.showMessageBoxSync({
                     message: "Updates downloaded, do you want to quit and install them ?",
@@ -128,7 +129,7 @@ module.exports = function(inLoading, contents, customWindowEvent){
                     title: "Android Messages Updater"
                 })
                 if (confirm == 0){
-                    autoUpdater.quitAndInstall();
+                    autoUpdater1.quitAndInstall();
                 }
             })
         }
