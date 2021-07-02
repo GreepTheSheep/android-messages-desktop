@@ -1,0 +1,78 @@
+{
+  "name": "electron-android-messages",
+  "version": "1.0.0",
+  "description": "Google's Android Messages in a Electron app",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "eslint src/.",
+    "start": "electron . --no-sandbox -d",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreepTheSheep/electron-android-messages.git"
+  },
+  "keywords": [
+    "electron",
+    "android"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GreepTheSheep/electron-android-messages/issues"
+  },
+  "homepage": "https://github.com/GreepTheSheep/electron-android-messages#readme",
+  "dependencies": {
+    "custom-electron-titlebar": "^3.2.7",
+    "electron-log": "^4.3.5",
+    "electron-updater": "^4.3.9",
+    "ping": "^0.4.1"
+  },
+  "devDependencies": {
+    "electron": "^12.0.13",
+    "electron-builder": "^22.11.7",
+    "eslint": "^7.29.0"
+  },
+  "build": {
+    "appId": "com.google.messages.electron",
+    "productName": "Android Messages",
+    "copyright": "${author}",
+    "artifactName": "${name}-setup-${version}.${ext}",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "GreepTheSheep",
+        "repo": "desktop-app"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "build/icon.png",
+      "darkModeSupport": true,
+      "target": "dmg",
+      "publish": [
+        "github"
+      ]
+    },
+    "win": {
+      "publisherName": "${author}",
+      "icon": "build/icon.png",
+      "publish": [
+        "github"
+      ]
+    },
+    "linux": {
+      "target": "snap",
+      "category": "Utility",
+      "icon": "build/icon.png",
+      "publish": [
+        "github"
+      ]
+    }
+  },
+  "author": {
+    "name": "Greep",
+    "email": "89matt89.md@gmail.com",
+    "url": "https://greep.gq/"
+  }
+}
