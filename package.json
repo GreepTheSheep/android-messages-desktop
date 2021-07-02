@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GreepTheSheep/electron-android-messages.git"
+    "url": "git+https://github.com/GreepTheSheep/android-messages-desktop.git"
   },
   "keywords": [
     "electron",
@@ -19,9 +19,9 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/GreepTheSheep/electron-android-messages/issues"
+    "url": "https://github.com/GreepTheSheep/android-messages-desktop/issues"
   },
-  "homepage": "https://github.com/GreepTheSheep/electron-android-messages#readme",
+  "homepage": "https://github.com/GreepTheSheep/android-messages-desktop#readme",
   "dependencies": {
     "about-window": "^1.14.0",
     "custom-electron-titlebar": "^3.2.7",
