@@ -51,6 +51,9 @@ document.addEventListener('readystatechange', () => {
         z-index: 999999;
         font-family: arial;
       }
+      .titlebar .window-title{
+        font-family: 'Product Sans';
+      }
       ` // You can compress all css files you need and put here
     if (sty.styleSheet){
       sty.styleSheet.cssText = css;

@@ -17,14 +17,14 @@ app.on('ready', async () => {
   resolved = false
   loadWindow = new BrowserWindow({
     width: 400,
-    height: 500,
+    height: 310,
     webPreferences: {
       enableRemoteModule: true,
       preload: path.join(__dirname, 'loadWindow', 'preload.js'),
       nodeIntegration: false,
     },
-    transparent: true,
-    backgroundColor: '#252525',
+    transparent: false,
+    backgroundColor: '#1759BC',
     icon: 'build/icon.png',
     title: 'Android Messages Updater',
     frame: false,
@@ -45,7 +45,7 @@ app.on('ready', async () => {
   };
 
   var contents = loadWindow.webContents
-  //contents.openDevTools()
+  contents.openDevTools()
   //await wait(5000)
 
   require('./autoUpdater.js')(contents, customWindowEvent)

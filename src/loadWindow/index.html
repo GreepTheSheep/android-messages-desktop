@@ -2,6 +2,14 @@
 <html>
     <head>
         <style>
+            @font-face {
+                font-family: roboto;
+                src: url(../libs/Roboto-Regular.ttf);
+            }
+            @font-face {
+                font-family: roboto-thin;
+                src: url(../libs/Roboto-Thin.ttf);
+            }
             body{
                 overflow: hidden;
                 pointer-events: none;
@@ -13,10 +21,21 @@
                 color: white;
                 text-align: center;
             }
+            #displaytxt{
+                font-family: roboto;
+            }
+            #updatetxt{
+                font-family: roboto-thin;
+                font-style: italic;
+                color: rgba(255, 255, 255, 0.25);
+            }
         </style>
 
     </head>
     <body>
         <img src="../libs/icon.png" height="192" weight="192">
+        <br />
+        <h2 id="displaytxt">Loading Android Messages...</h2>
+        <h4 id="updatetxt"></h4>
     </body>
 </html>
