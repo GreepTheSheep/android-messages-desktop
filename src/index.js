@@ -45,7 +45,7 @@ app.on('ready', async () => {
   };
 
   var contents = loadWindow.webContents
-  contents.openDevTools()
+  //contents.openDevTools()
   //await wait(5000)
 
   require('./autoUpdater.js')(contents, customWindowEvent)
@@ -76,7 +76,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
+    if (BrowserWindow.getAllWindows().length === 0 && process.platform == 'darwin') {
       customWindowEvent.emit('create-main')
     }
 })
@@ -121,4 +121,9 @@ customWindowEvent.on('create-main', ()=>{
     mainWindow.show()
     if (loadWindow != null) loadWindow.close();
   })
+
+  mainWindow.webContents.on('new-window', function(e, url) {
+      e.preventDefault();
+      require('electron').shell.openExternal(url);
+  });
 })
