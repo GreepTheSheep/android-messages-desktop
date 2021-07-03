@@ -1,6 +1,6 @@
 {
   "name": "electron-android-messages",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Google's Android Messages in a Electron app",
   "main": "src/index.js",
   "scripts": {
