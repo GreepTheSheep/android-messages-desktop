@@ -10,64 +10,69 @@ var loadWindow
 var resolved
 var appIcon = null;
 var contextMenu = null;
+var mainWindow = null;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.setAppUserModelId("Android Messages")
 app.on('ready', async () => {
-    resolved = false
-    loadWindow = new BrowserWindow({
-        width: 400,
-        height: 310,
-        webPreferences: {
-        enableRemoteModule: true,
-        nodeIntegration: false,
-        },
-        transparent: false,
-        backgroundColor: '#1759BC',
-        icon: 'build/icon.png',
-        title: 'Android Messages Updater',
-        frame: false,
-        center: true,
-        show: false
-    });
-    loadWindow.loadURL(`file://${__dirname}/loadWindow/index.html`)
-    loadWindow.setAlwaysOnTop(true); 
-    loadWindow.once('ready-to-show', () => {
-        loadWindow.show();
-    });
-    var checkMaximize = setInterval(() => {
-        if (loadWindow) loadWindow.unmaximize()
-    }, 0)
-    closeLoadWindow = () => {
-        clearInterval(checkMaximize)
-        loadWindow.close();
-    };
+    if (mainWindow == null){
+        resolved = false
+        loadWindow = new BrowserWindow({
+            width: 400,
+            height: 310,
+            webPreferences: {
+            enableRemoteModule: true,
+            nodeIntegration: false,
+            },
+            transparent: false,
+            backgroundColor: '#1759BC',
+            icon: 'build/icon.png',
+            title: 'Android Messages Updater',
+            frame: false,
+            center: true,
+            show: false
+        });
+        loadWindow.loadURL(`file://${__dirname}/loadWindow/index.html`)
+        loadWindow.setAlwaysOnTop(true); 
+        loadWindow.once('ready-to-show', () => {
+            loadWindow.show();
+        });
+        var checkMaximize = setInterval(() => {
+            if (loadWindow) loadWindow.unmaximize()
+        }, 0)
+        closeLoadWindow = () => {
+            clearInterval(checkMaximize)
+            loadWindow.close();
+        };
 
-    var contents = loadWindow.webContents
-    //contents.openDevTools()
-    //await wait(5000)
+        var contents = loadWindow.webContents
+        //contents.openDevTools()
+        //await wait(5000)
 
-    require('./autoUpdater.js')(true, contents, customWindowEvent)
-    
-    loadWindow.once('close', () =>{
-        loadWindow = null
-        if (resolved == false) {
-        app.quit()
-        process.exit(0)
-        }
-    })
-    ipcMain.on('closeLoad', () => {
-        if (loadWindow != null) closeLoadWindow()
-    })
+        require('./autoUpdater.js')(true, contents, customWindowEvent)
+        
+        loadWindow.once('close', () =>{
+            loadWindow = null
+            if (resolved == false) {
+            app.quit()
+            process.exit(0)
+            }
+        })
+        ipcMain.on('closeLoad', () => {
+            if (loadWindow != null) closeLoadWindow()
+        })
+    } else if (mainWindow != null) {
+        mainWindow.show()
+    }
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (app.isQuiting) {
     log.info('Goodbye!')
     app.quit()
   }
@@ -76,15 +81,17 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0 && process.platform == 'darwin') {
+    if (mainWindow == null && BrowserWindow.getAllWindows().length === 0 && process.platform == 'darwin') {
       customWindowEvent.emit('create-main')
+    } else if (mainWindow != null){
+        mainWindow.show()
     }
 })
 
 customWindowEvent.on('create-main', ()=>{
   resolved = true
   // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
       show : false,
       //backgroundColor: '#000F42',
       icon: 'build/icon.png',
