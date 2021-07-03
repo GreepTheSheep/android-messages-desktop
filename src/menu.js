@@ -40,27 +40,6 @@ module.exports = function(remote, log, devMode){
             click(){
                 remote.require('./autoUpdater')(false, remote.getCurrentWindow().webContents, undefined)
             }
-          },
-          {
-            type: 'separator'
-          },
-          {
-            label: 'Exit',
-            click(){
-                var confirm = remote.dialog.showMessageBoxSync(remote.getCurrentWindow(), {
-                    message: "Are you sure to exit? You will not receive any notifications while it is closed",
-                    type: "warning",
-                    buttons: [
-                        "Yes",
-                        "No"
-                    ],
-                    title: "Android Messages",
-                    cancelId: 1
-                })
-                if (confirm == 0){
-                    window.close()
-                }
-            }
           }]
       }));
 
@@ -85,6 +64,3 @@ module.exports = function(remote, log, devMode){
 
     return menu
 }
-
-/*global window*/
-/*eslint no-undef: "error"*/

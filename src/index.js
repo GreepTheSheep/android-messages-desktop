@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron')
 const log = require('electron-log')
 console.log('Log file is located at', log.transports.file.getFile().path)
 const path = require('path')
@@ -8,6 +8,8 @@ const customWindowEvent = new EventEmitter()
 var closeLoadWindow
 var loadWindow
 var resolved
+var appIcon = null;
+var contextMenu = null;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -124,4 +126,41 @@ customWindowEvent.on('create-main', ()=>{
       e.preventDefault();
       require('electron').shell.openExternal(url);
   });
+
+    mainWindow.on('close', function (event) {
+        if(!app.isQuiting){
+            event.preventDefault();
+            mainWindow.hide();
+        }
+
+        return false;
+    });
+
+    appIcon = new Tray(path.join(__dirname, "libs", "icon.png"));
+    contextMenu = Menu.buildFromTemplate([
+        { 
+            label: 'Show App',
+            click:  function(){
+                mainWindow.show();
+            }
+        },
+        {
+            label: 'Quit',
+            click:  function(){
+                app.isQuiting = true;
+                app.quit();
+            }
+        }
+    ]);
+    appIcon.setToolTip('Android Messages');
+    appIcon.setTitle('Android Messages');
+    appIcon.setContextMenu(contextMenu);
+
+    appIcon.on('double-click', ()=>{
+        mainWindow.show()
+    })
+    appIcon.on('right-click', ()=>{
+        contextMenu.popup()
+    })
+    
 })
