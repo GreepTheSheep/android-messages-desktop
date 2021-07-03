@@ -4,6 +4,7 @@ const customTitlebar = require('custom-electron-titlebar');
 const {remote} = require('electron')
 const log = require('electron-log').scope('Main')
 const devMode = remote.require('./checkDevMode.js')
+const path = require('path')
 
 var titleObj = {
     baseTitle: "Android Messages",
@@ -66,16 +67,18 @@ const observer = new MutationObserver((mutationsList)=>{
         }
 
         if(mutation.target.nodeName == "TITLE" && !mutation.target.textContent.endsWith(titleObj.baseTitle)){
-            var notifNumber = mutation.target.textContent.substring(0,mutation.target.textContent.indexOf(')')+1)
+            var notifNumber = Number(mutation.target.textContent.substring(mutation.target.textContent.indexOf('(')+1,mutation.target.textContent.indexOf(')')))
             if (notifNumber != ""){
-                titleObj.contactName = notifNumber + " " + titleObj.contactName
+                titleObj.contactName = (notifNumber > 9?"("+notifNumber + ") ":"") + titleObj.contactName
                 // eslint-disable-next-line no-redeclare
                 var title = []
                 if (devMode) title.push(titleObj.devMode)
                 title.push(titleObj.contactName)
                 title.push(titleObj.baseTitle)
                 titlebar.updateTitle(title.join(titleObj.separator));
-            }
+
+                remote.getCurrentWindow().setOverlayIcon(path.join(__dirname, 'libs', 'overlayIcon', `${notifNumber > 9 ? 'more' : notifNumber}.png`), "Notification")
+            } else remote.getCurrentWindow().setOverlayIcon(null, "No Notifications")
         }
     }
 });

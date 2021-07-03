@@ -12,54 +12,53 @@ var resolved
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-//app.whenReady().then(createWindow)
+app.setAppUserModelId("Android Messages")
 app.on('ready', async () => {
-  resolved = false
-  loadWindow = new BrowserWindow({
-    width: 400,
-    height: 310,
-    webPreferences: {
-      enableRemoteModule: true,
-      nodeIntegration: false,
-    },
-    transparent: false,
-    backgroundColor: '#1759BC',
-    icon: 'build/icon.png',
-    title: 'Android Messages Updater',
-    frame: false,
-    center: true,
-    show: false
-  });
-  loadWindow.loadURL(`file://${__dirname}/loadWindow/index.html`)
-  loadWindow.setAlwaysOnTop(true); 
-  loadWindow.once('ready-to-show', () => {
-    loadWindow.show();
-  });
-  var checkMaximize = setInterval(() => {
-    if (loadWindow) loadWindow.unmaximize()
-  }, 0)
-  closeLoadWindow = () => {
-    clearInterval(checkMaximize)
-    loadWindow.close();
-  };
+    resolved = false
+    loadWindow = new BrowserWindow({
+        width: 400,
+        height: 310,
+        webPreferences: {
+        enableRemoteModule: true,
+        nodeIntegration: false,
+        },
+        transparent: false,
+        backgroundColor: '#1759BC',
+        icon: 'build/icon.png',
+        title: 'Android Messages Updater',
+        frame: false,
+        center: true,
+        show: false
+    });
+    loadWindow.loadURL(`file://${__dirname}/loadWindow/index.html`)
+    loadWindow.setAlwaysOnTop(true); 
+    loadWindow.once('ready-to-show', () => {
+        loadWindow.show();
+    });
+    var checkMaximize = setInterval(() => {
+        if (loadWindow) loadWindow.unmaximize()
+    }, 0)
+    closeLoadWindow = () => {
+        clearInterval(checkMaximize)
+        loadWindow.close();
+    };
 
-  var contents = loadWindow.webContents
-  //contents.openDevTools()
-  //await wait(5000)
+    var contents = loadWindow.webContents
+    //contents.openDevTools()
+    //await wait(5000)
 
-  require('./autoUpdater.js')(true, contents, customWindowEvent)
-  
-  loadWindow.once('close', () =>{
-    loadWindow = null
-    if (resolved == false) {
-      app.quit()
-      process.exit(0)
-    }
-  })
-
-  ipcMain.on('closeLoad', () => {
-    if (loadWindow != null) closeLoadWindow()
-  })
+    require('./autoUpdater.js')(true, contents, customWindowEvent)
+    
+    loadWindow.once('close', () =>{
+        loadWindow = null
+        if (resolved == false) {
+        app.quit()
+        process.exit(0)
+        }
+    })
+    ipcMain.on('closeLoad', () => {
+        if (loadWindow != null) closeLoadWindow()
+    })
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
