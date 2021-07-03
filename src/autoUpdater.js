@@ -34,7 +34,7 @@ module.exports = function(inLoading, contents, customWindowEvent){
                 myEmitter.on('online', () =>{
                     clearInterval(connexionCheck)
                     const { autoUpdater } = require("electron-updater")
-                    autoUpdater.checkForUpdatesAndNotify();
+                    autoUpdater.checkForUpdates();
         
                     autoUpdater.on('checking-for-update', () => {
                         log.info('Checking for updates...')
@@ -63,14 +63,14 @@ module.exports = function(inLoading, contents, customWindowEvent){
                     })
                     autoUpdater.on('download-progress', (progressObj) => {
                         log.verbose(progressObj)
-                        contents.executeJavaScript(`document.getElementById('updatetxt').innerText = \`${progressObj.percent}% - ${progressObj.transferred}/${progressObj.total} (${progressObj.bytesPerSecond})\``)
+                        contents.executeJavaScript(`document.getElementById('updatetxt').innerText = \`${progressObj.percent.toFixed(0)}% - ${(progressObj.transferred/1048576).toFixed(2)} MB/${(progressObj.total/1048576).toFixed(2)} MB (${(progressObj.bytesPerSecond/1048576).toFixed(3)} MB/S)\``)
                     })
                     autoUpdater.on('update-downloaded', (info) => {
                         log.info('Update downloaded!')
                         log.verbose(info)
                         contents.executeJavaScript("document.getElementById('updatetxt').innerText = 'Update downloaded'")
                         wait(5000).then(()=>{
-                            autoUpdater.quitAndInstall();
+                            autoUpdater.quitAndInstall(false, true);
                         })
                     })
                 })
